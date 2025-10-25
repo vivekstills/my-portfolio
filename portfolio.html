@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vivek Singh | AI Researcher & Systems Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f8f8;
+            --text-color: #1a1a1a;
+            --accent-color: #1a1a1a;
+            --subtle-text-color: #a0a0a0;
+            --serif-font: 'Lora', serif;
+            --sans-font: 'IBM Plex Mono', monospace;
+            --border-color: #e5e5e5;
+            --card-bg-color: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f0f0f0;
+            --accent-color: #f0f0f0;
+            --subtle-text-color: #666;
+            --border-color: #333;
+            --card-bg-color: rgba(30, 30, 30, 0.5);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--sans-font);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .background-text-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            user-select: none;
+            pointer-events: none;
+            filter: blur(1.5px);
+        }
+
+        @keyframes scroll {
+            from { transform: translateX(0%); }
+            to { transform: translateX(-50%); }
+        }
+
+        .background-text-row {
+            color: var(--text-color);
+            opacity: 0.04;
+            font-size: 2vw;
+            font-family: var(--serif-font);
+            white-space: nowrap;
+            width: fit-content;
+            animation-name: scroll;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: 120px 0;
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 40px;
+            z-index: 10;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 40px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--subtle-text-color);
+            text-decoration: none;
+            font-family: var(--sans-font);
+            font-size: 16px;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            background-color: var(--accent-color);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease-in-out;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-color);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--bg-color);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            width: 30px;
+            height: 30px;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        .mobile-nav-toggle span {
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-close {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5rem;
+            font-family: var(--serif-font);
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            z-index: 22;
+        }
+
+        .mobile-nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 15;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        
+        body.mobile-nav-open .mobile-nav-overlay {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        body.mobile-nav-open nav {
+            transform: translateX(0);
+        }
+        
+        .footer-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 40px;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            pointer-events: none;
+        }
+        
+        .footer-fixed a, .footer-fixed div {
+            pointer-events: all;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: var(--subtle-text-color);
+            text-decoration: none;
+            font-family: var(--sans-font);
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--text-color);
+        }
+
+        .scroll-indicator {
+            font-family: var(--sans-font);
+            font-size: 14px;
+            color: var(--subtle-text-color);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            position: relative;
+            padding-right: 20px;
+        }
+        
+        .scroll-indicator::after {
+            content: '';
+            position: absolute;
+            right: 5px;
+            top: 100%;
+            margin-top: 10px;
+            width: 1px;
+            height: 40px;
+            background-color: var(--subtle-text-color);
+        }
+        
+        #hero .container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        #hero h1 {
+            font-family: var(--serif-font);
+            font-size: clamp(3rem, 15vw, 12rem);
+            font-weight: 400;
+            line-height: 0.9;
+            margin-bottom: 30px;
+            cursor: default;
+        }
+        
+        #hero h1 .word {
+            display: block;
+        }
+
+        #hero h1 .word > span {
+            display: inline-block;
+            transition: transform 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.4s ease;
+        }
+
+        #hero h1:hover .word > span {
+            transform: translateY(50px) rotate(15deg);
+            opacity: 0;
+        }
+        
+        #hero h1 .word:first-child > span:nth-child(1) { transition-delay: 0.0s; }
+        #hero h1 .word:first-child > span:nth-child(2) { transition-delay: 0.03s; }
+        #hero h1 .word:first-child > span:nth-child(3) { transition-delay: 0.06s; }
+        #hero h1 .word:first-child > span:nth-child(4) { transition-delay: 0.09s; }
+        #hero h1 .word:first-child > span:nth-child(5) { transition-delay: 0.12s; }
+
+        #hero h1 .word:last-child > span:nth-child(1) { transition-delay: 0.15s; }
+        #hero h1 .word:last-child > span:nth-child(2) { transition-delay: 0.18s; }
+        #hero h1 .word:last-child > span:nth-child(3) { transition-delay: 0.21s; }
+        #hero h1 .word:last-child > span:nth-child(4) { transition-delay: 0.24s; }
+        #hero h1 .word:last-child > span:nth-child(5) { transition-delay: 0.27s; }
+
+        #hero .subtitle {
+            font-family: var(--sans-font);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-color);
+            max-width: 500px;
+        }
+        
+        .section-heading {
+            font-family: var(--serif-font);
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 400;
+            margin-bottom: 40px;
+            position: relative;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .section-heading span {
+            font-size: 1rem;
+            color: var(--subtle-text-color);
+        }
+
+        #about .about-content {
+            font-family: var(--serif-font);
+            font-size: clamp(1.25rem, 3vw, 2rem);
+            font-weight: 400;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+
+        .projects-container {
+            display: grid;
+            gap: 100px;
+        }
+
+        .project-item {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .project-number {
+            font-family: var(--serif-font);
+            font-size: clamp(3rem, 10vw, 8rem);
+            color: var(--border-color);
+            line-height: 1;
+            text-align: right;
+            transition: color 0.4s ease;
+        }
+        
+        .project-card h3 {
+            font-family: var(--serif-font);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .project-card p {
+            font-family: var(--sans-font);
+            max-width: 600px;
+        }
+
+        .project-card {
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            background-color: var(--card-bg-color);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .project-tech {
+            font-family: var(--sans-font);
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            transition: color 0.4s ease;
+        }
+
+        .project-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 60px;
+        }
+
+        .skills-category h3 {
+            font-family: var(--serif-font);
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+
+        .skill-item {
+            margin-bottom: 20px;
+        }
+
+        .skill-item p {
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .skill-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            transition: background-color 0.4s ease;
+        }
+
+        .skill-bar {
+            height: 100%;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+            width: 0;
+            transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.4s ease;
+        }
+
+        .dsa-skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .dsa-skill-list span {
+            font-family: var(--sans-font);
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            background-color: var(--border-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            transition: all 0.4s ease;
+        }
+
+        [data-theme="dark"] .dsa-skill-list span {
+            background-color: var(--border-color);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+            header, .footer-fixed {
+                padding: 20px;
+            }
+            .background-text-row {
+                font-size: 4vw;
+            }
+            .project-item {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .project-number {
+                display: none;
+            }
+            
+            .mobile-nav-toggle {
+                display: flex;
+            }
+            
+            .mobile-nav-close {
+                display: block;
+            }
+
+            nav {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 80%;
+                max-width: 300px;
+                height: 100%;
+                background-color: var(--bg-color);
+                z-index: 20;
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            nav ul {
+                flex-direction: column;
+                padding: 100px 40px 40px 40px;
+                gap: 10px;
+                height: 100%;
+                overflow-y: auto;
+            }
+
+            nav a {
+                font-size: 1.5rem;
+                padding: 10px 0;
+                display: block;
+            }
+
+            nav a::after {
+                left: 0;
+                transform: translateX(0);
+                background-color: var(--accent-color);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-text-container">
+    </div>
+
+    <header>
+        <div class="header-content">
+            <nav>
+                <button class="mobile-nav-close">&times;</button>
+                <ul>
+                    <li><a href="#hero">home</a></li>
+                    <li><a href="#about">about</a></li>
+                    <li><a href="#experience">experience</a></li>
+                    <li><a href="#bug-bounty">bounty</a></li>
+                    <li><a href="#projects">projects</a></li>
+                    <li><a href="#volunteering">volunteering</a></li>
+                    <li><a href="#skills">skills</a></li>
+                </ul>
+            </nav>
+            <label class="theme-switch">
+                <input type="checkbox" id="theme-slider-checkbox">
+                <span class="slider"></span>
+            </label>
+            <button class="mobile-nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="mobile-nav-overlay"></div>
+
+    <main>
+        <section id="hero" class="section">
+            <div class="container">
+                <h1>
+                    <span class="word">
+                        <span>V</span><span>i</span><span>v</span><span>e</span><span>k</span>
+                    </span>
+                    <span class="word">
+                        <span>S</span><span>i</span><span>n</span><span>g</span><span>h</span>
+                    </span>
+                </h1>
+                <p class="subtitle animate-on-scroll">
+                    Breaker of code and builder of brains. I hunt for vulnerabilities by day and train AI by night. Based in India.
+                </p>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="container">
+                <h2 class="section-heading animate-on-scroll">about <span>01</span></h2>
+                <div class="about-content animate-on-scroll">
+                    <p>
+                        They say you should know the rules before you break them. I do both. My playground is the complex intersection of cybersecurity and artificial intelligence. I've hunted down critical bugs for global brands like Starbucks for fun (and bounties), and I'm excited to be joining their security team. When I'm not reverse-engineering a system, I'm forward-engineering an intelligent one—whether it's cancer-detecting AI, GPU-accelerated graphics, or the high-performance data structures that power them. I thrive on high-stakes challenges where a single line of code can make all the difference.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="section">
+            <div class="container">
+                <h2 class="section-heading animate-on-scroll">experience <span>02</span></h2>
+                <div class="projects-container">
+                    <div class="project-item">
+                        <div class="project-number animate-on-scroll">01</div>
+                        <div class="project-card animate-on-scroll">
+                            <div class="project-tech">CYBERSECURITY ・ UPCOMING: DEC 2025</div>
+                            <h3>Starbucks - Cybersecurity Intern</h3>
+                            <p>Will be joining the security team to help protect and fortify cloud infrastructure and enterprise systems against emerging threats.</p>
+                        </div>
+                    </div>
+                     <div class="project-item">
+                        <div class="project-number animate-on-scroll">02</div>
+                        <div class="project-card animate-on-scroll">
+                            <div class="project-tech">DEEP LEARNING ・ MEDICAL IMAGING ・ AWS</div>
+                            <h3>Mayo Clinic - AI Research Intern</h3>
+                            <p>Developed a deep learning pipeline for stomach cancer screening using endoscopy imagery. Built and deployed a 3-stage model that resulted in an 18% accuracy improvement in early detection.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="bug-bounty" class="section">
+             <div class="container">
+                <h2 class="section-heading animate-on-scroll">bug bounty <span>03</span></h2>
+                <div class="projects-container">
+                    <div class="project-item">
+                        <div class="project-number animate-on-scroll">01</div>
+                         <div class="project-card animate-on-scroll">
+                            <div class="project-tech">SECURITY RESEARCH ・ HACKERONE</div>
+                            <h3>Starbucks - Server-Side Vulnerability</h3>
+                            <p>Through the HackerOne bug bounty program, I identified and reported a critical Server-Side Request Forgery (SSRF) vulnerability. This flaw could have allowed an attacker to coerce the server into making unauthorized requests to internal resources. The finding was acknowledged and patched by the Starbucks security team.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <div class="container">
+                <h2 class="section-heading animate-on-scroll">projects <span>04</span></h2>
+                <div class="projects-container">
+                    
+                    <div class="project-item">
+                        <div class="project-number animate-on-scroll">01</div>
+                        <div class="project-card animate-on-scroll">
+                            <div class="project-tech">C++ ・ CUDA ・ OPENGL</div>
+                            <h3>Instant Relight</h3>
+                            <p>A physically-based image relighting engine that re-lights static photographs under new illumination in real-time, running at 30 FPS on an RTX GPU.</p>
+                            <div class="project-links">
+                                <a href="https://github.com/vivekstills/-instant-relight" target="_blank">github</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="project-number animate-on-scroll">02</div>
+                        <div class="project-card animate-on-scroll">
+                            <div class="project-tech">REACT ・ GPT-3.5 ・ FIREBASE</div>
+                            <h3>Saheli - AI Study Companion</h3>
+                            <p>An AI-powered productivity bot designed to support Indian students with study planning, motivation, and conversational assistance.</p>
+                             <div class="project-links">
+                                <a href="https://github.com/vivekstills" target="_blank">github</a>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="project-item">
+                        <div class="project-number animate-on-scroll">03</div>
+                        <div class="project-card animate-on-scroll">
+                            <div class="project-tech">JAVA ・ EVENT-DRIVEN ARCHITECTURE</div>
+                            <h3>MindustryReplayPlus</h3>
+                            <p>An open-source replay and spectator system for the game Mindustry. It captures real-time game states, enabling replays and time-travel debugging.</p>
+                             <div class="project-links">
+                                <a href="https://github.com/vivekstills/Mindustry" target="_blank">github</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="project-number animate-on-scroll">04</div>
+                        <div class="project-card animate-on-scroll">
+                            <div class="project-tech">C++ ・ DATA STRUCTURES ・ ALGORITHMS</div>
+                            <h3>Accelerated Spatial Search</h3>
+                            <p>Implementation of a K-d tree data structure for real-time nearest neighbor search in high-dimensional data, optimized for AI-driven anomaly detection and spatial queries.</p>
+                             <div class="project-links">
+                                <a href="https://github.com/vivekstills" target="_blank">github</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section">
+            <div class="container">
+                <h2 class="section-heading animate-on-scroll">skills <span>06</span></h2>
+                        <div class="skills-grid">
+                    <div class="skills-category animate-on-scroll">
+                        <h3>Languages</h3>
+                        <div class="skill-item">
+                            <p>Python</p>
+                            <div class="skill-bar-container"><div class="skill-bar" data-width="95%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <p>C++</p>
+                            <div class="skill-bar-container"><div class="skill-bar" data-width="90%"></div></div>
+                        </div>
+                         <div class="skill-item">
+                            <p>CUDA</p>
+                            <div class="skill-bar-container"><div class="skill-bar" data-width="85%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <p>JavaScript</p>
+                            <div class="skill-bar-container"><div class="skill-bar" data-width="80%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skills-category animate-on-scroll">
+                        <h3>Cybersecurity</h3>
+                        <div class="skill-item">
+                            <p>Web Application Security</p>
+                            <div class="skill-bar-container"><div class="skill-bar" data-width="90%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <p>Network Penetration Testing</p>
+                            <div class="skill-bar-container"><div class="skill-bar" data-width="80%"></div></div>
+                        </div>
+                         <div class="skill-item">
+                            <p>Cryptography & Encryption</p>
+                            <div class="skill-bar-container"><div class="skill-bar" data-width="85%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <p>Vulnerability Analysis</p>
+                            <div class="skill-bar-container"><div class="skill-bar" data-width="95%"></div></div>
+                        </div>
+                    </div>
+                    <div class="skills-category animate-on-scroll">
+                        <h3>Data Structures & Algorithms</h3>
+                        <div class="dsa-skill-list">
+                            <span>K-d Trees</span>
+                            <span>Priority Queues</span>
+                            <span>Hash Maps</span>
+                            <span>Graph Theory</span>
+                            <span>Dijkstra's</span>
+                            <span>A* Search</span>
+                            <span>Dynamic Programming</span>
+                            <span>Divide & Conquer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+    
+    <div class="footer-fixed">
+        <div class="social-links">
+            <a href="https://github.com/vivekstills" target="_blank">github</a>
+            <a href="https://www.linkedin.com/in/vivek-singh-5b20a7232/" target="_blank">linkedin</a>
+        </div>
+        <div class="scroll-indicator">
+            <a href="#about" style="text-decoration:none; color: inherit;">SCROLL</a>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bgContainer = document.querySelector('.background-text-container');
+            if (bgContainer) {
+                const name = "vivek singh ・ ";
+                const repetitions = 50;
+                const content = name.repeat(repetitions);
+                for (let i = 0; i < 15; i++) {
+                    const row = document.createElement('div');
+                    row.classList.add('background-text-row');
+                    const textNode1 = document.createElement('span');
+                    textNode1.textContent = content;
+                    const textNode2 = document.createElement('span');
+                    textNode2.textContent = content;
+                    row.appendChild(textNode1);
+                    row.appendChild(textNode2);
+                    row.style.animationDuration = `${Math.random() * 60 + 120}s`;
+                    if (i % 2 === 0) {
+                        row.style.animationDirection = 'reverse';
+                    }
+                    bgContainer.appendChild(row);
+                }
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+            elementsToAnimate.forEach((el) => observer.observe(el));
+
+            const skillObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const bar = entry.target;
+                        bar.style.width = bar.dataset.width;
+                        observer.unobserve(bar);
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+            const skillBars = document.querySelectorAll('.skill-bar');
+            skillBars.forEach((bar) => skillObserver.observe(bar));
+
+            const themeSlider = document.getElementById('theme-slider-checkbox');
+            themeSlider.addEventListener('change', () => {
+                if (themeSlider.checked) {
+                    document.body.dataset.theme = 'dark';
+                } else {
+                    document.body.dataset.theme = 'light';
+                }
+            });
+
+            const nav = document.querySelector('header nav');
+            const toggleBtn = document.querySelector('.mobile-nav-toggle');
+            const closeBtn = document.querySelector('.mobile-nav-close');
+            const overlay = document.querySelector('.mobile-nav-overlay');
+            const navLinks = document.querySelectorAll('header nav a');
+
+            toggleBtn.addEventListener('click', () => {
+                document.body.classList.add('mobile-nav-open');
+            });
+
+            const closeNav = () => {
+                document.body.classList.remove('mobile-nav-open');
+            };
+
+            closeBtn.addEventListener('click', closeNav);
+            overlay.addEventListener('click', closeNav);
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+                    const targetId = link.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    
+                    closeNav(); 
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+
